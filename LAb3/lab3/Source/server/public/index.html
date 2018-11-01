@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="LoginApp" ng-controller="LoginController">
+<head>
+    <link href="css/newStyle.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+    <script>
+        var app = angular.module('LoginApp',[]);
+        app.run(function ($http) {
+            // Sends this header with any AJAX request
+            $http.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+            // Send this header only in post requests. Specifies you are sending a JSON object
+            $http.defaults.headers.post['dataType'] = 'json'
+        });
+                app.controller('LoginController',function($scope,$http){
+            $scope.retriveInfo = function() {
+                $http.get('/getData?keywords=' + $scope.userName).then(function (d) {
+                        console.log(d);
+                        console.log("length is " + d.data.length);
+                        if (d.data.length != 0) {
+                            var document = [];
+                            for (i = 0; i < d.data.length; i++) {
+                                if (d.data[i].password == $scope.password) {
+                                    console.log("matched");
+                                    sessionStorage.setItem("username", d.data[i].username);
+                                    sessionStorage.setItem("name", d.data[i].firstName);
+                                    window.location.href="Home.html";
+                                }
+                                else {
+                                    alert("Password is Incorrect Please Enter Valid Password");
+                                }
+                                document.push(new Array(d.data[i].username + '-' + d.data[i].password));
+                            }
+                            console.log("document is " + document);
+                        }
+                        else {
+
+                            console.log("Username is not available");
+                        }
+                    }, function (err) {
+                        console.log(err);
+                    }
+                )
+            }
+        });
+
+    </script>
+    <style type="text/css">
+        .borderless td, .borderless th {
+            border: none !important;
+            padding: 4px !important;
+        }
+        .borderless1 td, .borderless1 th {
+            border: none !important;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 style="text-align: center">Login Form</h1>
+<div style="width: 100%" align="center">
+    <h2>Enter Details of the user</h2>
+    <form class="container" style="align-self: center;width: 50%; background-color: gray"
+          ng-submit="retriveInfo()" >
+        <label for="userName" style="color: black"><b>UserName:</b></label>
+        <input type="text" id="userName" name="userName"
+               placeholder="Enter userName" ng-model="userName" required >
+
+        <label for="password" style="color: black"><b>Password:</b></label>
+        <input type="password" id="password" name="password"
+               placeholder="Enter password" ng-model="password" required >
+
+        <input type="submit" value="SignIn">
+        <span style="font-size: 14px;color: black"><strong>New User?</strong></span>
+        <a href="register.html"><span style="font-size: 14px;color: darkblue"><strong>SignUp</strong></span></a>
+    </form>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

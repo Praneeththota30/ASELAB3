@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="homeApp" ng-controller="homeController">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/newStyle.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Rokkitt' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="text/javascript" src="http://code.angularjs.org/1.1.1/angular.js"></script>
+    <script type="text/javascript" src="http://code.angularjs.org/1.1.1/angular-resource.js"></script>
+    <script type="text/javascript" src="http://code.angularjs.org/1.1.1/angular-sanitize.js"></script>
+    <script>
+        var myapp = angular.module('homeApp',[]);
+        myapp.run(function ($http) {
+// Sends this header with any AJAX request
+            $http.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+// Send this header only in post requests. Specifies you are sending a JSON object
+            $http.defaults.headers.post['dataType'] = 'json'
+        });
+        myapp.controller('homeController',function($scope,$http){
+            $scope.logout = function(){
+                window.location.href="index.html";
+            }
+        });
+    </script>
+</head>
+
+<body >
+<h1 style="text-align: center">Welcome to health Inspector</h1>
+<div style="width: 100%" align="center">
+    <form class="container" style="align-self: center;width: 50%; background-color: darkgray"
+          ng-submit="logout()" >
+        <input type="submit" value="Logout">
+    </form>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

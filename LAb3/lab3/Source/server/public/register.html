@@ -1,0 +1,114 @@
+npm starty
+<html ng-app="demoMongo" ng-controller="MongoRestController">
+<head >
+    <title>Registration Details</title>
+    <link href="css/newStyle.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Rokkitt' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="text/javascript" src="http://code.angularjs.org/1.1.1/angular.js"></script>
+    <script type="text/javascript" src="http://code.angularjs.org/1.1.1/angular-resource.js"></script>
+    <script type="text/javascript" src="http://code.angularjs.org/1.1.1/angular-sanitize.js"></script>
+    <script>
+        var myapp = angular.module('demoMongo',[]);
+        myapp.run(function ($http) {
+            // Sends this header with any AJAX request
+            $http.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+            // Send this header only in post requests. Specifies you are sending a JSON object
+            $http.defaults.headers.post['dataType'] = 'json'
+        });
+        myapp.controller('MongoRestController',function($scope,$http){
+            $scope.insertData = function(){
+                var dataParams = {
+                    'userName':$scope.userName,
+                    'firstName' : $scope.firstName,
+                    'lastName' : $scope.lastName,
+                    'emailId' : $scope.emailId,
+                    'password' : $scope.password
+                };
+                var config = {
+                    headers : {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+                    }
+                }
+                var req = $http.post('/register',dataParams)
+                    .then(function(data, status, headers, config) {
+                        // $scope.message = data;
+                        console.log(data);
+                        console.log("here "+data);
+                        window.location.href="index.html";
+                        alert('Registartion Successful Please Login');
+                    });
+            };
+
+        $scope.updateData = function(){
+            var dataParams = {
+                'userName':$scope.userName,
+                'firstName' : $scope.firstName,
+            };
+            var config = {
+                headers : {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+                }
+            }
+            var req = $http.put('/update',dataParams)
+                .then(function(data, status, headers, config) {
+                    // $scope.message = data;
+                    console.log(data);
+                    alert('Updation Successful');
+                });
+        };
+            $scope.deleteData=function(){
+                var req = $http.delete('/delete?userName='+$scope.userName).then(function(data,status,header,config){
+                    console.log(data);
+                    alert("Details are deleted Successfully saved in MongoDB");
+                })
+            }
+        });
+    </script>
+
+</head>
+<body>
+<h1 style="text-align: center">Registration form </h1>
+<div style="width: 100%" align="center">
+    <h2>Enter User Details</h2>
+    <form class="container" style="align-self: center;width: 50%; background-color: grey">
+        <label for="userName" style="color: black"><b>UserName</b></label>
+        <input type="text" id="userName" name="userName"
+               placeholder="Enter userName" ng-model="userName" required >
+                    <label for="firstName" style="color: black"><b>FirstName</b></label>
+                    <input type="text" id="firstName" name="firstName"
+                           placeholder="Enter firstName" ng-model="firstName" required >
+
+        <label for="lastName" style="color: black"><b>LastName</b></label>
+        <input type="text" id="lastName" name="lastName"
+               placeholder="Enter lastName" ng-model="lastName" required >
+
+        <label for="emailId" style="color: black"><b>EmailId</b></label>
+        <input type="text" id="emailId" name="emailId"
+               placeholder="Enter emailId" ng-model="emailId" required >
+
+        <label for="password" style="color: black"><b>Password</b></label>
+        <input type="text" id="password" name="password"
+               placeholder="Enter the Password" ng-model="password" required >
+
+        <input type="submit" value="Create" ng-click="insertData()">
+        <input type="submit" Value="Update" ng-click="updateData()">
+        <input type="submit" Value="Delete" ng-click="deleteData()">
+        </form>
+    </div>
+</div>
+</div>
+        </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
